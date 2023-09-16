@@ -1,16 +1,10 @@
 "use client";
-import * as React from "react";
-import TopBar from "../topbar/page";
-import SideBar from "../sidebar/page";
+import SideBar from "../components/SideBar";
 
-export interface IMainPageProps {}
-
-export default function MainPage(props: IMainPageProps) {
+export default function MainPage() {
     return (
         <div>
-            <TopBar />
             <SideBar />
-            <div>this is footer</div>
         </div>
     );
 }
