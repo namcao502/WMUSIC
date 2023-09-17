@@ -1,9 +1,11 @@
 import { useState } from "react";
-import Home from "../home";
+import Home from "./Home";
+import { useRouter } from "next/navigation";
 
 export interface ISideBarProps {}
 
 export default function SideBar(props: ISideBarProps) {
+    const router = useRouter();
     const [fragment, setFragment] = useState("Home");
     function renderComponent(name: string) {
         if (name === "Home") {
@@ -25,7 +27,7 @@ export default function SideBar(props: ISideBarProps) {
                 <label htmlFor="my-drawer-2" className="drawer-overlay"></label>
                 <ul className="menu p-4 w-64 min-h-full bg-base-200 text-base-content">
                     {/* Sidebar content here */}
-                    <button className="btn">
+                    <button className="btn" onClick={() => router.push("/main-page")}>
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width="24"

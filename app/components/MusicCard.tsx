@@ -1,17 +1,25 @@
-export interface IMusicCardProps {}
+import Image from "next/image";
+
+export interface IMusicCardProps {
+    id: string;
+    name: string;
+    imgFilePath: string;
+    filePath: string;
+    artist: string;
+}
 
 export default function MusicCard(props: IMusicCardProps) {
     function handleClick() {
         console.log("clicked");
     }
     return (
-        <div className="card card-compact w-64 bg-base-100 shadow-xl m-4" onClick={handleClick}>
+        <div className="card card-compact w-72 bg-base-100 shadow-xl" onClick={handleClick}>
             <figure>
-                <img src="welcome_bg.jpg" alt="Shoes" />
+                <Image src={props.imgFilePath} width={288} height={288} alt="" />
             </figure>
             <div className="card-body">
-                <h2 className="card-title">Title</h2>
-                <p>Artists</p>
+                <h2 className="card-title">{props.name}</h2>
+                <p>{props.id}</p>
             </div>
         </div>
     );
