@@ -17,24 +17,46 @@ import { useEffect, useState } from "react";
 export interface IHomeProps {}
 
 export default function Home(props: IHomeProps) {
-    const songCollection = collection(db.firestore, "Song");
-
-    const [songs, setSongs] = useState<QueryDocumentSnapshot<DocumentData>[]>([]);
+    const [songs, setSongs] = useState<DocumentData[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
 
     const getSong = async () => {
         // construct a query to get songs
-        const songQuery = query(songCollection, where("name", "!=", ""));
+        const songQuery = query(collection(db.firestore, "Song"), where("name", "!=", ""));
         // get the songs
         const querySnapshot = await getDocs(songQuery);
 
         // map through songs adding them to an array
-        const result: QueryDocumentSnapshot<DocumentData>[] = [];
+        const result: DocumentData[] = [];
         querySnapshot.forEach((snapshot) => {
-            result.push(snapshot);
+            var temp: DocumentData = snapshot.data();
+            temp["artist"] = getArtistsBySongID(temp["id"]);
+            result.push(temp);
         });
         // set it to state
         setSongs(result);
+    };
+
+    const getArtistsBySongID = async (id: string) => {
+        // construct a query to get artists
+        const artistQuery = query(
+            collection(db.firestore, "Artist"),
+            where("songs", "array-contains", id),
+        );
+        // get the artists
+        const querySnapshot = await getDocs(artistQuery);
+        // map through songs adding them to an array
+        const result: DocumentData[] = [];
+        querySnapshot.forEach((snapshot) => {
+            result.push(snapshot.data());
+        });
+        // set it to state
+        // setArtists(result);
+        let temp: string = "";
+        result.map((artist) => {
+            temp = temp.concat(", ", artist["name"]);
+        });
+        return temp.replace(",", "");
     };
 
     useEffect(() => {
@@ -56,8 +78,7 @@ export default function Home(props: IHomeProps) {
             <ImageSlider />
             <h2 className="text-xl p-4">
                 List
-                <span className="badge badge-lg">NEW</span>
-                <div>{songs.length}</div>
+                <span className="badge badge-lg">{songs.length}</span>
             </h2>
             <div className="grid grid-cols-4 gap-4 m-4">
                 {loading ? (
@@ -68,11 +89,11 @@ export default function Home(props: IHomeProps) {
                     songs.map((song) => {
                         return (
                             <MusicCard
-                                id={song.get("id")}
-                                name={song.get("name")}
-                                imgFilePath={song.get("imgFilePath")}
-                                filePath={""}
-                                artist={""}
+                                key={song["id"]}
+                                id={song["id"]}
+                                name={song["name"]}
+                                imgFilePath={song["imgFilePath"]}
+                                artist={song["artist"]}
                             />
                         );
                     })
