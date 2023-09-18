@@ -80,7 +80,7 @@ export default function Home(props: IHomeProps) {
                 List
                 <span className="badge badge-lg">{songs.length}</span>
             </h2>
-            <div className="grid grid-cols-4 gap-4 m-4">
+            <div className="grid grid-cols-6 gap-4 m-4">
                 {loading ? (
                     <h2>Loading...</h2>
                 ) : songs.length === 0 ? (
@@ -94,6 +94,7 @@ export default function Home(props: IHomeProps) {
                                 name={song["name"]}
                                 imgFilePath={song["imgFilePath"]}
                                 artist={song["artist"]}
+                                filePath={song["filePath"]}
                             />
                         );
                     })
