@@ -72,7 +72,12 @@ export default function Home(props: IHomeProps) {
         <div>
             <div className="grid-rows-1">
                 <TopBar />
-                <Player />
+                <Player
+                    listUrl={[
+                        "https://firebasestorage.googleapis.com/v0/b/music-c3885.appspot.com/o/Songs%2FSky%20High?alt=media&token=2dec5e21-d088-4df8-9f3a-803efc97bc56",
+                        "https://firebasestorage.googleapis.com/v0/b/music-c3885.appspot.com/o/Songs%2FPain?alt=media&token=6f890122-4f8e-4e16-a797-5969194eb15b",
+                    ]}
+                />
             </div>
 
             <ImageSlider />

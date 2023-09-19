@@ -25,7 +25,7 @@ export default function SideBar(props: ISideBarProps) {
             </div>
             <div className="drawer-side">
                 <label htmlFor="my-drawer-2" className="drawer-overlay"></label>
-                <ul className="menu p-4 w-64 min-h-full bg-base-200 text-base-content">
+                <ul className="menu p-4 w-48 min-h-full bg-base-200 text-base-content">
                     {/* Sidebar content here */}
                     <button className="btn" onClick={() => router.push("/main-page")}>
                         <svg
@@ -35,9 +35,9 @@ export default function SideBar(props: ISideBarProps) {
                             viewBox="0 0 24 24"
                             fill="none"
                             stroke="#000000"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
                         >
                             <path d="M3 18v-6a9 9 0 0 1 18 0v6"></path>
                             <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"></path>
@@ -53,9 +53,9 @@ export default function SideBar(props: ISideBarProps) {
                                 viewBox="0 0 24 24"
                                 fill="none"
                                 stroke="#000000"
-                                stroke-width="2"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
                             >
                                 <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
                                 <polyline points="9 22 9 12 15 12 15 22"></polyline>
@@ -72,9 +72,9 @@ export default function SideBar(props: ISideBarProps) {
                                 viewBox="0 0 24 24"
                                 fill="none"
                                 stroke="#000000"
-                                stroke-width="2"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
                             >
                                 <circle cx="12" cy="12" r="10" />
                                 <path d="M16.2 7.8l-2 6.3-6.4 2.1 2-6.3z" />
@@ -91,9 +91,9 @@ export default function SideBar(props: ISideBarProps) {
                                 viewBox="0 0 24 24"
                                 fill="none"
                                 stroke="#000000"
-                                stroke-width="2"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
                             >
                                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                                 <circle cx="12" cy="7" r="4"></circle>
