@@ -6,12 +6,15 @@ export interface IMusicCardProps {
     imgFilePath: string;
     filePath: string;
     artist: string;
+    clickASong: (id: string) => any;
 }
 
 export default function MusicCard(props: IMusicCardProps) {
-    function handleClick(filePath: string) {}
+    function handleClick(id: string) {
+        props.clickASong(id);
+    }
     return (
-        <div className="card card-compact w-48 glass" onClick={() => handleClick(props.filePath)}>
+        <div className="card card-compact w-48 glass" onClick={() => handleClick(props.id)}>
             <figure>
                 <Image src={props.imgFilePath} width={500} height={500} alt="" />
             </figure>
