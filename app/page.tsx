@@ -3,15 +3,7 @@ import Welcome from "./components/Welcome";
 import SongList from "./components/Home";
 import Player from "./components/Player";
 import db from "./db/firestore";
-import {
-    collection,
-    QueryDocumentSnapshot,
-    DocumentData,
-    query,
-    where,
-    limit,
-    getDocs,
-} from "@firebase/firestore";
+import { collection, DocumentData, query, where, limit, getDocs } from "@firebase/firestore";
 import { useEffect, useState } from "react";
 
 export default function Home() {
@@ -76,7 +68,6 @@ export default function Home() {
         setPosition(songs.findIndex((song) => song["id"] == id));
     }
 
-    // return <Welcome></Welcome>;
     return (
         <div>
             {position == -1 ? <></> : <Player songList={songs} position={position} />}

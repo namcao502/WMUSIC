@@ -84,7 +84,7 @@ export default function Home(props: IHomeProps) {
 
             <ImageSlider />
             <h2 className="text-xl p-4">
-                List
+                Today special
                 <span className="badge badge-lg">{props.songList.length}</span>
             </h2>
             <div className="grid grid-cols-7 gap-4 m-4">

@@ -1,5 +1,5 @@
 import { DocumentData } from "firebase/firestore";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { ChangeEvent, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 
 import useStateRef from "react-usestateref";
@@ -15,7 +15,7 @@ export default function Player(props: IPlayerProps) {
     const [index, setIndex, indexRef] = useStateRef(props.position);
     const [audio] = useState(new Audio(props.songList[indexRef.current]["filePath"]));
     const [currentTime, setCurrentTime, currentTimeRef] = useStateRef(0);
-    const [currentVolume, setCurrentVolume, currentVolumeRef] = useStateRef(0);
+    const [currentVolume, setCurrentVolume, currentVolumeRef] = useStateRef(1);
     // const [audioRef, setAudioRef] = useState(useRef(audio));
     // var audio = new Audio(props.listUrl[index]);
     // audio.play();
@@ -23,25 +23,24 @@ export default function Player(props: IPlayerProps) {
 
     // console.log("update current time: " + audio.currentTime);
     // setCurrentTime(audio.currentTime);
-    useEffect(() => {
-        setCurrentTime(audio.currentTime);
-        setCurrentVolume(audio.volume);
-    }, [audio.currentTime, audio.volume]);
+    // useEffect(() => {
+    //     setCurrentTime(audio.currentTime);
+    //     setCurrentVolume(audio.volume);
+    // }, [audio.currentTime, audio.volume]);
 
     useEffect(() => {
         audio.play();
+        audio.onended = () => {
+            audio.play();
+        };
+        setInterval(() => {
+            setCurrentTime(audio.currentTime);
+        }, 1000);
     }, [audio]);
-
-    // const updateTime = () => {
-    //     setCurrentTime(audio.currentTime);
-    // };
-
-    // setInterval(updateTime, 1000);
 
     const play = () => {
         setPlaying(true);
         audio.play();
-        console.log("duration: " + audio.duration);
     };
 
     const pause = () => {
@@ -79,11 +78,22 @@ export default function Player(props: IPlayerProps) {
         setPlaying(true);
     };
 
+    const changeVolume = (event: ChangeEvent<HTMLInputElement>) => {
+        setCurrentVolume(parseInt(event.target.value) / 10);
+        audio.volume = currentVolumeRef.current;
+    };
+
+    const changeProgress = (event: ChangeEvent<HTMLInputElement>) => {
+        setCurrentTime(parseInt(event.target.value));
+        audio.currentTime = currentTimeRef.current;
+    };
+
     return (
         <div className="m-4">
             <input
+                onChange={changeProgress}
                 type="range"
-                max={audio.duration}
+                max={audio.duration.toString()}
                 value={currentTimeRef.current}
                 ref={progressBar}
                 className="range range-xs"
@@ -172,7 +182,7 @@ export default function Player(props: IPlayerProps) {
                         </svg>
                     </button>
 
-                    <button className="btn btn-circle m-1">
+                    {/* <button className="btn btn-circle m-1">
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width="24"
@@ -186,14 +196,15 @@ export default function Player(props: IPlayerProps) {
                         >
                             <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2" />
                         </svg>
-                    </button>
+                    </button> */}
                 </div>
 
                 <div className="w-1/3 self-center justify-end flex">
                     <input
+                        onChange={changeVolume}
                         type="range"
-                        max={1}
-                        value={currentVolumeRef.current}
+                        max={10}
+                        value={currentVolumeRef.current * 10}
                         className="range range-xs w-32 justify-center"
                     />
                 </div>
