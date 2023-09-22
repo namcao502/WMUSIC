@@ -1,5 +1,5 @@
 import { DocumentData } from "firebase/firestore";
-import { ChangeEvent, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 
 import useStateRef from "react-usestateref";
@@ -16,17 +16,7 @@ export default function Player(props: IPlayerProps) {
     const [audio] = useState(new Audio(props.songList[indexRef.current]["filePath"]));
     const [currentTime, setCurrentTime, currentTimeRef] = useStateRef(0);
     const [currentVolume, setCurrentVolume, currentVolumeRef] = useStateRef(1);
-    // const [audioRef, setAudioRef] = useState(useRef(audio));
-    // var audio = new Audio(props.listUrl[index]);
-    // audio.play();
     const progressBar = useRef<HTMLInputElement>(null);
-
-    // console.log("update current time: " + audio.currentTime);
-    // setCurrentTime(audio.currentTime);
-    // useEffect(() => {
-    //     setCurrentTime(audio.currentTime);
-    //     setCurrentVolume(audio.volume);
-    // }, [audio.currentTime, audio.volume]);
 
     useEffect(() => {
         audio.play();
