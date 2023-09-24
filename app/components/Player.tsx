@@ -1,21 +1,18 @@
-import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 
-import { MusicContext } from "../music-context/musicContextProvider";
+import { MusicContext } from "../music-context/MusicContextProvider";
 import React from "react";
 
 export default function Player() {
     const musicContext = React.useContext(MusicContext);
-    const progressBar = useRef<HTMLInputElement>(null);
 
     return (
-        <div className="p-4 sticky top-0 z-10 rounded-2xl player-background">
+        <div className="p-4 sticky bottom-0 z-10 player-background">
             <input
                 onChange={musicContext?.changeProgress}
                 type="range"
                 max={musicContext?.audio.current.duration.toString()}
                 value={musicContext?.currentTime}
-                ref={progressBar}
                 className="range range-xs"
             />
 

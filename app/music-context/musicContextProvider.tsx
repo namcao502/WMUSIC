@@ -41,16 +41,13 @@ export default function MusicContextProvider(props: IAppProps) {
     }, [audio.current]);
 
     useEffect(() => {
-        audio.current.onended = () => {
-            next();
-        };
-    }, [audio.current]);
-
-    useEffect(() => {
         if (position != -1) {
             audio.current.src = songs[position]["filePath"];
             audio.current.play();
             setPlaying(true);
+            audio.current.addEventListener("ended", () => {
+                next();
+            });
         }
     }, [position]);
 
@@ -95,7 +92,7 @@ export default function MusicContextProvider(props: IAppProps) {
         setCurrentTime(parseInt(event.target.value));
     };
 
-    const tempVal: IPlayerProps = {
+    const value: IPlayerProps = {
         currentTime: currentTime,
         currentVolume: currentVolume,
         playing: playing,
@@ -111,5 +108,5 @@ export default function MusicContextProvider(props: IAppProps) {
         setSong: setSong,
     };
 
-    return <MusicContext.Provider value={tempVal}>{props.children}</MusicContext.Provider>;
+    return <MusicContext.Provider value={value}>{props.children}</MusicContext.Provider>;
 }
