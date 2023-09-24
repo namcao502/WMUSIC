@@ -3,26 +3,23 @@ import SongList from "./components/Song";
 import Player from "./components/Player";
 import db from "./db/firestore";
 import { collection, DocumentData, query, where, limit, getDocs } from "@firebase/firestore";
-import { MutableRefObject, useEffect, useRef, useState } from "react";
+import React, { MutableRefObject, useEffect, useRef, useState } from "react";
 import ImageSlider from "./components/ImageSlider";
 import Playlist from "./components/Playlist";
+import { MusicContext } from "./music-context/musicContextProvider";
 
 const LOCAL_STORAGE_KEY: string = "w-music-playlists";
 
 export default function Home() {
     const [songs, setSongs] = useState<DocumentData[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
-    const [position, setPosition] = useState<number>(-1);
     const [playlists, setPlaylists] = useState([{ id: 0, name: "Favorite 2023", numberOfSong: 0 }]);
     const [tempUpdate, setTempUpdate] = useState<number>(-1);
+    const textContext = React.useContext(MusicContext);
 
     const getSong = async () => {
         // construct a query to get songs
-        const songQuery = query(
-            collection(db.firestore, "Song"),
-            where("name", "!=", ""),
-            limit(10),
-        );
+        const songQuery = query(collection(db.firestore, "Song"), where("name", "!=", ""));
         // get the songs
         const querySnapshot = await getDocs(songQuery);
 
@@ -85,8 +82,9 @@ export default function Home() {
     }, []);
 
     function clickASong(id: string) {
-        setPosition(songs.findIndex((song) => song["id"] == id));
-        console.log("current position: " + position);
+        textContext?.setSong(songs, id);
+        console.log(songs);
+        console.log("id " + id);
     }
 
     function clickAPlaylist(id: number, option: string) {
@@ -125,7 +123,7 @@ export default function Home() {
 
     return (
         <div>
-            {position == -1 ? <></> : <Player songList={songs} position={position} />}
+            {textContext?.songs.length == 0 ? <></> : <Player />}
             <ImageSlider />
             <h2 className="text-xl p-4 flex justify-start items-center">
                 PLAYLISTS

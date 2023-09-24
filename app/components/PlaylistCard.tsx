@@ -15,13 +15,11 @@ export default function PlaylistCard(props: IPlaylistCardProps) {
                 <img src="slide_5.jpg" alt="" />
             </figure>
             <div className="card-body">
-                <h2 className="card-title">
-                    {props.name} ({props.numberOfSong})
-                </h2>
+                <h5>{props.name}</h5>
                 <div className="card-actions justify-end">
                     <div className="dropdown dropdown-hover">
                         <label tabIndex={0} className="btn m-1">
-                            O
+                            Option
                         </label>
                         <ul
                             tabIndex={0}

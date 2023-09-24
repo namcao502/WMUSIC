@@ -1,90 +1,20 @@
-import { DocumentData } from "firebase/firestore";
-import { ChangeEvent, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 
-import useStateRef from "react-usestateref";
+import { MusicContext } from "../music-context/musicContextProvider";
+import React from "react";
 
-export interface IPlayerProps {
-    songList: DocumentData[];
-    position: number;
-}
-
-export default function Player(props: IPlayerProps) {
-    // console.log(props.songList[0]["filePath"]);
-    const [playing, setPlaying] = useState(true);
-    const [index, setIndex, indexRef] = useStateRef(props.position);
-    const [audio] = useState(new Audio(props.songList[indexRef.current]["filePath"]));
-    const [currentTime, setCurrentTime, currentTimeRef] = useStateRef(0);
-    const [currentVolume, setCurrentVolume, currentVolumeRef] = useStateRef(1);
+export default function Player() {
+    const musicContext = React.useContext(MusicContext);
     const progressBar = useRef<HTMLInputElement>(null);
 
-    useEffect(() => {
-        audio.play();
-        audio.onended = () => {
-            audio.play();
-        };
-        setInterval(() => {
-            setCurrentTime(audio.currentTime);
-        }, 1000);
-    }, [audio]);
-
-    const play = () => {
-        setPlaying(true);
-        audio.play();
-    };
-
-    const pause = () => {
-        setPlaying(false);
-        audio.pause();
-    };
-
-    const next = () => {
-        var temp = indexRef.current + 1;
-        if (temp == props.songList.length) {
-            temp = 0;
-        }
-        setIndex(temp);
-        if (playing) {
-            audio.pause();
-            audio.currentTime = 0;
-        }
-        audio.src = props.songList[indexRef.current]["filePath"];
-        audio.play();
-        setPlaying(true);
-    };
-
-    const previous = () => {
-        var temp = indexRef.current - 1;
-        if (temp < 0) {
-            temp = props.songList.length - 1;
-        }
-        setIndex(temp);
-        if (playing) {
-            audio.pause();
-            audio.currentTime = 0;
-        }
-        audio.src = props.songList[indexRef.current]["filePath"];
-        audio.play();
-        setPlaying(true);
-    };
-
-    const changeVolume = (event: ChangeEvent<HTMLInputElement>) => {
-        setCurrentVolume(parseInt(event.target.value) / 10);
-        audio.volume = currentVolumeRef.current;
-    };
-
-    const changeProgress = (event: ChangeEvent<HTMLInputElement>) => {
-        setCurrentTime(parseInt(event.target.value));
-        audio.currentTime = currentTimeRef.current;
-    };
-
     return (
-        <div className="m-4">
+        <div className="p-4 sticky top-0 z-10 rounded-2xl player-background">
             <input
-                onChange={changeProgress}
+                onChange={musicContext?.changeProgress}
                 type="range"
-                max={audio.duration.toString()}
-                value={currentTimeRef.current}
+                max={musicContext?.audio.current.duration.toString()}
+                value={musicContext?.currentTime}
                 ref={progressBar}
                 className="range range-xs"
             />
@@ -92,20 +22,20 @@ export default function Player(props: IPlayerProps) {
             <div className="flex">
                 <div className="w-1/3 flex">
                     <Image
-                        src={props.songList[indexRef.current]["imgFilePath"]}
+                        src={musicContext?.songs[musicContext.position]["imgFilePath"]}
                         width={70}
                         height={70}
                         alt=""
                         className="rounded-xl"
                     />
                     <div className="ml-3 self-center">
-                        <h2>{props.songList[indexRef.current]["name"]}</h2>
-                        <h3>{props.songList[indexRef.current]["artist"]}</h3>
+                        <h2>{musicContext?.songs[musicContext.position]["name"]}</h2>
+                        <h3>{musicContext?.songs[musicContext.position]["artist"]}</h3>
                     </div>
                 </div>
 
                 <div className="w-2/5 flex justify-center self-center">
-                    <button className="btn btn-circle m-1" onClick={previous}>
+                    <button className="btn btn-circle m-1" onClick={musicContext?.previous}>
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width="24"
@@ -122,8 +52,11 @@ export default function Player(props: IPlayerProps) {
                         </svg>
                     </button>
 
-                    <button className="btn btn-circle m-1" onClick={playing ? pause : play}>
-                        {playing ? (
+                    <button
+                        className="btn btn-circle m-1"
+                        onClick={musicContext?.playing ? musicContext.pause : musicContext?.play}
+                    >
+                        {musicContext?.playing ? (
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 width="24"
@@ -155,7 +88,7 @@ export default function Player(props: IPlayerProps) {
                         )}
                     </button>
 
-                    <button className="btn btn-circle m-1" onClick={next}>
+                    <button className="btn btn-circle m-1" onClick={musicContext?.next}>
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width="24"
@@ -191,10 +124,10 @@ export default function Player(props: IPlayerProps) {
 
                 <div className="w-1/3 self-center justify-end flex">
                     <input
-                        onChange={changeVolume}
+                        onChange={musicContext?.changeVolume}
                         type="range"
                         max={10}
-                        value={currentVolumeRef.current * 10}
+                        value={musicContext!.currentVolume * 10}
                         className="range range-xs w-32 justify-center"
                     />
                 </div>

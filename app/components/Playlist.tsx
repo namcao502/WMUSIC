@@ -12,7 +12,7 @@ export default function Playlist(props: IPlaylistProps) {
                 {props.playlists.map((playlist) => {
                     return (
                         <PlaylistCard
-                            key={0}
+                            key={playlist["id"]}
                             id={playlist["id"]}
                             name={playlist["name"]}
                             numberOfSong={0}
