@@ -2,13 +2,13 @@ import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 
 initializeApp({
-    apiKey: "AIzaSyB90gHlGA4TbfA5M1l-ImchthIP40XY0Yg",
-    authDomain: "music-c3885.firebaseapp.com",
-    projectId: "music-c3885",
-    storageBucket: "music-c3885.appspot.com",
-    messagingSenderId: "269638464049",
-    appId: "1:269638464049:web:1d054010e95165ed455b10",
-    measurementId: "G-YZE0C71R6Y",
+    apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+    authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+    projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+    storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+    appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+    measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
 });
 
 const firestore = getFirestore();

@@ -8,7 +8,7 @@ export interface IPlaylistProps {
 export default function Playlist(props: IPlaylistProps) {
     return (
         <div>
-            <div className="grid grid-cols-7 gap-4 m-4">
+            <div className="grid grid-cols-6 gap-2 m-4 w-auto">
                 {props.playlists.map((playlist) => {
                     return (
                         <PlaylistCard

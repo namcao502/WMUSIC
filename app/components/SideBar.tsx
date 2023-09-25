@@ -2,8 +2,9 @@
 
 import Link from "next/link";
 import React from "react";
-import { MusicContext } from "../music-context/MusicContextProvider";
+import { MusicContext } from "../context-provider/MusicContextProvider";
 import Player from "./Player";
+import { signOut, useSession } from "next-auth/react";
 
 export interface ISideBarProps {
     children: React.ReactNode;
@@ -11,35 +12,32 @@ export interface ISideBarProps {
 
 export default function SideBar(props: ISideBarProps) {
     const textContext = React.useContext(MusicContext);
+    const session = useSession();
     return (
         <div>
             <div className="drawer lg:drawer-open">
                 <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
-                <div className="drawer-content flex flex-col items-center justify-center">
+                <div className="drawer-content flex flex-col items-center justify-start w-full">
                     {/* Page content here */}
                     {props.children}
                 </div>
                 <div className="drawer-side">
                     <label htmlFor="my-drawer-2" className="drawer-overlay"></label>
-                    <ul className="menu p-4 w-48 min-h-full bg-base-200 text-base-content">
+                    <ul className="menu p-4 min-h-full bg-base-200 text-base-content">
                         {/* Sidebar content here */}
-                        <button className="btn">
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="24"
-                                height="24"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="#000000"
-                                strokeWidth="2"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
+                        <div className="dropdown dropdown-hover">
+                            <label tabIndex={0} className="btn m-1">
+                                Hello, {session.data?.user?.name}
+                            </label>
+                            <ul
+                                tabIndex={0}
+                                className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box"
                             >
-                                <path d="M3 18v-6a9 9 0 0 1 18 0v6"></path>
-                                <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"></path>
-                            </svg>
-                            MUSIC
-                        </button>
+                                <li>
+                                    <a onClick={() => signOut()}>Sign out</a>
+                                </li>
+                            </ul>
+                        </div>
                         <li>
                             <Link href={"/home"}>
                                 <svg
@@ -72,10 +70,28 @@ export default function SideBar(props: ISideBarProps) {
                                     strokeLinecap="round"
                                     strokeLinejoin="round"
                                 >
-                                    <circle cx="12" cy="12" r="10" />
-                                    <path d="M16.2 7.8l-2 6.3-6.4 2.1 2-6.3z" />
+                                    <circle cx="11" cy="11" r="8"></circle>
+                                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                                 </svg>
                                 Search
+                            </Link>
+                        </li>
+                        <li>
+                            <Link href={"/library"}>
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="24"
+                                    height="24"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="#000000"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                >
+                                    <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+                                </svg>
+                                Library
                             </Link>
                         </li>
                     </ul>

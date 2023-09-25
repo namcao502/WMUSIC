@@ -9,41 +9,14 @@ export default function PlaylistCard(props: IPlaylistCardProps) {
     function clickMenuPlaylist(id: number, option: string) {
         props.clickMenuPlaylist(id, option);
     }
+
     return (
-        <div className="card w-48 bg-base-100 shadow-xl image-full">
+        <div className="card card-compact w-48 glass">
             <figure>
-                <img src="slide_5.jpg" alt="" />
+                <img src={"slide_5.jpg"} alt="" />
             </figure>
             <div className="card-body">
-                <h5>{props.name}</h5>
-                <div className="card-actions justify-end">
-                    <div className="dropdown dropdown-hover">
-                        <label tabIndex={0} className="btn m-1">
-                            Option
-                        </label>
-                        <ul
-                            tabIndex={0}
-                            className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-32"
-                        >
-                            <li>
-                                <button
-                                    className="btn"
-                                    onClick={() => clickMenuPlaylist(props.id, "Rename")}
-                                >
-                                    Rename
-                                </button>
-                            </li>
-                            <li>
-                                <button
-                                    className="btn"
-                                    onClick={() => clickMenuPlaylist(props.id, "Delete")}
-                                >
-                                    Delete
-                                </button>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
+                <h2 className="card-title">{props.name}</h2>
             </div>
         </div>
     );

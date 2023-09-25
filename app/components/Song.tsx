@@ -7,7 +7,7 @@ export interface IHomeProps {
     loading: boolean;
 }
 
-export default function Home(props: IHomeProps) {
+export default function Song(props: IHomeProps) {
     return (
         <div>
             <h2 className="text-xl p-4">

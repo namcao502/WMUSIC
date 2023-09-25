@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-import { MusicContext } from "../music-context/MusicContextProvider";
+import { MusicContext } from "../context-provider/MusicContextProvider";
 import React from "react";
 
 export default function Player() {
