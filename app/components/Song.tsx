@@ -14,7 +14,7 @@ export default function Song(props: IHomeProps) {
                 SONGS
                 <span className="badge badge-lg">{props.songList.length}</span>
             </h2>
-            <div className="grid grid-cols-7 gap-4 m-4">
+            <div className="grid grid-cols-6 gap-4 m-4">
                 {props.loading ? (
                     <span className="loading loading-infinity loading-lg"></span>
                 ) : props.songList.length == 0 ? (

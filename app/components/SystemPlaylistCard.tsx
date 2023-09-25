@@ -1,19 +1,21 @@
-export interface IPlaylistCardProps {
+import Image from "next/image";
+
+export interface ISystemPlaylistCardProps {
     id: number;
     name: string;
+    imgFilePath: string;
     numberOfSong: number;
-    clickMenuPlaylist: (id: number, option: string) => void;
+    clickMenuSystemPlaylist: (id: number, option: string) => void;
 }
 
-export default function PlaylistCard(props: IPlaylistCardProps) {
-    function clickMenuPlaylist(id: number, option: string) {
-        props.clickMenuPlaylist(id, option);
+export default function SystemPlaylistCard(props: ISystemPlaylistCardProps) {
+    function clickMenuSystemPlaylist(id: number, option: string) {
+        props.clickMenuSystemPlaylist(id, option);
     }
-
     return (
-        <div className="card card-compact w-48 glass">
+        <div className="card card-compact w-auto glass">
             <figure>
-                <img src={"slide_5.jpg"} alt="" />
+                <Image src={props.imgFilePath} width={500} height={500} alt="" />
             </figure>
             <div className="card-body">
                 <h5 className="card-title">
@@ -38,13 +40,10 @@ export default function PlaylistCard(props: IPlaylistCardProps) {
                         </label>
                         <ul
                             tabIndex={0}
-                            className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box"
+                            className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-auto"
                         >
                             <li>
-                                <a onClick={() => clickMenuPlaylist(props.id, "Rename")}>Rename</a>
-                            </li>
-                            <li>
-                                <a onClick={() => clickMenuPlaylist(props.id, "Delete")}>Delete</a>
+                                <a onClick={() => clickMenuSystemPlaylist(props.id, "Add")}>Add</a>
                             </li>
                         </ul>
                     </div>

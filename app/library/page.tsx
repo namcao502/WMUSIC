@@ -2,7 +2,6 @@
 
 import { MutableRefObject, useEffect, useRef, useState } from "react";
 import Playlist from "../components/Playlist";
-import SideBar from "../components/SideBar";
 
 export interface ILibraryProps {}
 
@@ -62,7 +61,7 @@ export default function Library(props: ILibraryProps) {
     }
 
     return (
-        <div>
+        <div className="w-full">
             <h2 className="text-xl p-4 flex justify-start items-center">
                 PLAYLISTS
                 <button

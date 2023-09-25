@@ -5,15 +5,21 @@ import { collection, DocumentData, query, where, limit, getDocs } from "@firebas
 import React, { MutableRefObject, useEffect, useRef, useState } from "react";
 import ImageSlider from "../components/ImageSlider";
 import { MusicContext } from "../context-provider/MusicContextProvider";
+import SystemPlaylist from "../components/SystemPlaylist";
 
 export default function Home() {
     const [songs, setSongs] = useState<DocumentData[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const textContext = React.useContext(MusicContext);
+    const [systemPlaylists, setSystemPlaylists] = useState<DocumentData[]>([]);
 
-    const getSong = async () => {
+    const getSongs = async () => {
         // construct a query to get songs
-        const songQuery = query(collection(db.firestore, "Song"), where("name", "!=", ""));
+        const songQuery = query(
+            collection(db.firestore, "Song"),
+            where("name", "!=", ""),
+            limit(5),
+        );
         // get the songs
         const querySnapshot = await getDocs(songQuery);
 
@@ -50,9 +56,26 @@ export default function Home() {
         return temp.replace(",", "");
     };
 
+    const getSystemPlaylist = async () => {
+        // construct a query to get songs
+        const systemPlaylistQuery = query(collection(db.firestore, "Playlist"));
+        // get the songs
+        const querySnapshot = await getDocs(systemPlaylistQuery);
+
+        // map through songs adding them to an array
+        const result: DocumentData[] = [];
+        querySnapshot.forEach((snapshot) => {
+            result.push(snapshot.data());
+        });
+        // set it to state
+        setSystemPlaylists(result);
+    };
+
     useEffect(() => {
         // get the songs
-        getSong();
+        getSongs();
+        // get system playlists
+        getSystemPlaylist();
         // reset loading
         setTimeout(() => {
             setLoading(false);
@@ -63,9 +86,18 @@ export default function Home() {
         textContext?.setSong(songs, id);
     }
 
+    function clickMenuSystemPlaylist(id: number, option: string) {
+        console.log("id: " + id + " option: " + option);
+    }
+
     return (
         <div>
             <ImageSlider />
+            <SystemPlaylist
+                systemPlaylists={systemPlaylists}
+                clickMenuSystemPlaylist={clickMenuSystemPlaylist}
+                loading={loading}
+            />
             <SongList songList={songs} clickASong={clickASong} loading={loading} />
         </div>
     );
