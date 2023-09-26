@@ -11,7 +11,7 @@ export interface ISystemPlaylistProps {
 export default function SystemPlaylist(props: ISystemPlaylistProps) {
     return (
         <div>
-            <h2 className="text-xl p-4">
+            <h2 className="text-xl p-4 flex justify-start items-center">
                 {props.name}
                 <span className="badge badge-lg">{props.systemPlaylists.length}</span>
             </h2>

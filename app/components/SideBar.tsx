@@ -1,18 +1,68 @@
 "use client";
 
 import Link from "next/link";
-import React from "react";
 import { MusicContext } from "../context-provider/MusicContextProvider";
 import Player from "./Player";
-import { signOut, useSession } from "next-auth/react";
+import { signOut } from "next-auth/react";
+import { useContext, useEffect, useState } from "react";
+import { auth, firestore } from "../db/firestore";
+import { useRouter } from "next/navigation";
+import { DocumentData, collection, getDocs, query, where } from "firebase/firestore";
 
 export interface ISideBarProps {
     children: React.ReactNode;
 }
 
 export default function SideBar(props: ISideBarProps) {
-    const textContext = React.useContext(MusicContext);
-    const session = useSession();
+    const textContext = useContext(MusicContext);
+    const [accounts, setAccounts] = useState<DocumentData[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
+    // const session = useSession();
+    const user = auth.currentUser;
+    const router = useRouter();
+
+    function handleLogout() {
+        signOut()
+            .then(() => {
+                router.push("/");
+            })
+            .catch((error) => {
+                // An error happened.
+            });
+    }
+
+    // useEffect(() => {
+    //     if (!user) {
+    //         router.push("/");
+    //     }
+    // }, [user, router]);
+
+    const getAccounts = async () => {
+        // construct a query to get songs
+        const systemPlaylistQuery = query(
+            collection(firestore, "Account"),
+            where("userID", "==", user?.uid),
+        );
+        // get the songs
+        const querySnapshot = await getDocs(systemPlaylistQuery);
+
+        // map through songs adding them to an array
+        const result: DocumentData[] = [];
+        querySnapshot.forEach((snapshot) => {
+            result.push(snapshot.data());
+        });
+        // set it to state
+        setAccounts(result);
+        console.log(result);
+    };
+
+    useEffect(() => {
+        getAccounts();
+        setTimeout(() => {
+            setLoading(false);
+        }, 2000);
+    }, [accounts]);
+
     return (
         <div>
             <div className="drawer lg:drawer-open">
@@ -25,16 +75,22 @@ export default function SideBar(props: ISideBarProps) {
                     <label htmlFor="my-drawer-2" className="drawer-overlay"></label>
                     <ul className="menu p-4 min-h-full bg-base-200 text-base-content">
                         {/* Sidebar content here */}
+
                         <div className="dropdown dropdown-hover">
-                            <label tabIndex={0} className="btn m-1">
-                                Hello, {session.data?.user?.name}
-                            </label>
+                            {loading ? (
+                                <div className="loading loading-infinity loading-lg flex"></div>
+                            ) : (
+                                <label tabIndex={0} className="btn m-1">
+                                    Hello, {accounts[0]["name"]}
+                                </label>
+                            )}
+
                             <ul
                                 tabIndex={0}
                                 className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box"
                             >
                                 <li>
-                                    <a onClick={() => signOut()}>Sign out</a>
+                                    <a onClick={handleLogout}>Sign out</a>
                                 </li>
                             </ul>
                         </div>

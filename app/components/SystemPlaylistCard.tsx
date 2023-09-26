@@ -26,11 +26,11 @@ export default function SystemPlaylistCard(props: ISystemPlaylistCardProps) {
                     <Image src={props.imgFilePath} width={500} height={500} alt="" />
                 </Link>
             </figure>
-            <div className="card-body">
-                <h5 className="card-title">
-                    {props.name} + {props.songs.length}
+            <div className="card-body w-auto">
+                <h5 className="flex align-middle">
+                    {props.name}
                     <div className="dropdown dropdown-hover">
-                        <label tabIndex={0} className="btn btn-ghost">
+                        <label tabIndex={0} className="btn btn-ghost btn-xs">
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 width="24"

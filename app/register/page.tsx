@@ -1,31 +1,26 @@
 "use client";
 
-import { signIn } from "next-auth/react";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { useRouter } from "next/navigation";
 import { MutableRefObject, useRef, useState } from "react";
 import { auth } from "../db/firestore";
-import { useRouter } from "next/navigation";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import Link from "next/link";
 
-export interface ILoginProps {}
+export interface IRegisterProps {}
 
-export default function Login(props: ILoginProps) {
-    const [message, setMessage] = useState("");
+export default function Register(props: IRegisterProps) {
     const emailBox: MutableRefObject<any> = useRef();
     const passBox: MutableRefObject<any> = useRef();
+    const [message, setMessage] = useState("");
     const router = useRouter();
 
-    function handleGoogleLogin() {
-        signIn("google");
-    }
-
-    function handleLogin() {
+    function handleRegister() {
         const email = emailBox.current.value;
         const password = passBox.current.value;
-        signInWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => {
-                setMessage("Login successful");
-                router.push("/home");
+        createUserWithEmailAndPassword(auth, email, password)
+            .then(() => {
+                setMessage("Sign up successful");
+                router.push("/");
             })
             .catch((error) => {
                 setMessage(error.toString());
@@ -37,7 +32,7 @@ export default function Login(props: ILoginProps) {
             <div className="hero-content flex-col lg:flex-row-reverse">
                 <div className="text-center lg:text-left w-96">
                     <h1 className="text-5xl font-bold justify-center flex text-center">
-                        Welcome to the party, human!
+                        Make your own account, human!
                     </h1>
                     <p className="py-6 justify-center flex text-center w-96">
                         Music is a moral law. It gives soul to the universe, wings to the mind,
@@ -68,28 +63,23 @@ export default function Login(props: ILoginProps) {
                                 className="input input-bordered"
                                 ref={passBox}
                             />
-                            <label className="label">
-                                <a href="#" className="label-text-alt link link-hover">
-                                    Forgot password?
-                                </a>
-                            </label>
                         </div>
                         <div className="form-control mt-6">
-                            <button className="btn btn-primary" onClick={handleLogin}>
-                                Login
+                            <button className="btn btn-primary" onClick={handleRegister}>
+                                Register
                             </button>
+                        </div>
+                        <div className="label">
+                            Already have an account?
+                            <Link href={"/"} className="">
+                                Login now
+                            </Link>
                         </div>
                         {/* <div className="form-control mt-6">
                             <button className="btn btn-primary" onClick={handleGoogleLogin}>
                                 Login with Google
                             </button>
                         </div> */}
-                        <div className="label">
-                            Don't have an account?
-                            <Link href={"/register"} className="">
-                                Register now
-                            </Link>
-                        </div>
                     </div>
                 </div>
             </div>

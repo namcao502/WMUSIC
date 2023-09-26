@@ -1,5 +1,5 @@
 "use client";
-import db from "../db/firestore";
+import { firestore } from "../db/firestore";
 import { collection, DocumentData, query, where, limit, getDocs } from "@firebase/firestore";
 import { useContext, useEffect, useState } from "react";
 import ImageSlider from "../components/ImageSlider";
@@ -8,9 +8,7 @@ import SystemPlaylist from "../components/SystemPlaylist";
 import Constants from "../util/constants";
 
 export default function Home() {
-    const [songs, setSongs] = useState<DocumentData[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
-    const textContext = useContext(MusicContext);
     const [systemPlaylists, setSystemPlaylists] = useState<DocumentData[]>([]);
     const [artists, setArtists] = useState<DocumentData[]>([]);
     const [albums, setAlbums] = useState<DocumentData[]>([]);
@@ -18,7 +16,7 @@ export default function Home() {
 
     const getSystemPlaylists = async () => {
         // construct a query to get songs
-        const systemPlaylistQuery = query(collection(db.firestore, "Playlist"));
+        const systemPlaylistQuery = query(collection(firestore, "Playlist"));
         // get the songs
         const querySnapshot = await getDocs(systemPlaylistQuery);
 
@@ -33,7 +31,7 @@ export default function Home() {
 
     const getArtists = async () => {
         // construct a query to get songs
-        const systemPlaylistQuery = query(collection(db.firestore, "Artist"));
+        const systemPlaylistQuery = query(collection(firestore, "Artist"));
         // get the songs
         const querySnapshot = await getDocs(systemPlaylistQuery);
 
@@ -48,7 +46,7 @@ export default function Home() {
 
     const getAlbums = async () => {
         // construct a query to get songs
-        const systemPlaylistQuery = query(collection(db.firestore, "Album"));
+        const systemPlaylistQuery = query(collection(firestore, "Album"));
         // get the songs
         const querySnapshot = await getDocs(systemPlaylistQuery);
 
@@ -63,7 +61,7 @@ export default function Home() {
 
     const getCountries = async () => {
         // construct a query to get songs
-        const systemPlaylistQuery = query(collection(db.firestore, "Country"));
+        const systemPlaylistQuery = query(collection(firestore, "Country"));
         // get the songs
         const querySnapshot = await getDocs(systemPlaylistQuery);
 
@@ -91,11 +89,7 @@ export default function Home() {
         setTimeout(() => {
             setLoading(false);
         }, 2000);
-    }, [songs, systemPlaylists, artists]);
-
-    function clickASong(id: string) {
-        textContext?.setSong(songs, id);
-    }
+    }, [systemPlaylists, artists]);
 
     function clickMenuSystemPlaylist(id: string, option: string) {
         console.log("id: " + id + ", option: " + option);

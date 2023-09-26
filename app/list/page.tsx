@@ -1,6 +1,6 @@
 "use client";
 
-import db from "../db/firestore";
+import { firestore } from "../db/firestore";
 import Constants from "../util/constants";
 import MusicCard from "../components/SongCard";
 import { useContext, useEffect, useState } from "react";
@@ -17,27 +17,15 @@ export default function Song(props: IHomeProps) {
     const songList: string[] = JSON.parse(searchParams?.get("songs")!);
     const textContext = useContext(MusicContext);
 
-    // const getList = async () => {
-    //     const listQuery = query(collection(db.firestore, "Playlist"), where("id", "==", id));
-    //     const querySnapshot = await getDocs(listQuery);
-    //     const result: string[] = [];
-    //     querySnapshot.forEach((snapshot) => {
-    //         result.push(snapshot.data()["songs"]);
-    //     });
-    //     console.log("result: " + result);
-    //     getSongs(result);
-    // };
-
     const getSongs = async () => {
         // construct a query to get songs
         const songQuery = query(
-            collection(db.firestore, "Song"),
+            collection(firestore, "Song"),
             where("id", "in", songList),
             limit(10),
         );
         // get the songs
         const querySnapshot = await getDocs(songQuery);
-
         // map through songs adding them to an array
         const result: DocumentData[] = [];
         querySnapshot.forEach((snapshot) => {
@@ -52,7 +40,7 @@ export default function Song(props: IHomeProps) {
     const getArtistsBySongID = async (id: string) => {
         // construct a query to get artists
         const artistQuery = query(
-            collection(db.firestore, "Artist"),
+            collection(firestore, "Artist"),
             where("songs", "array-contains", id),
         );
         // get the artists
