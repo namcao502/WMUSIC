@@ -2,16 +2,17 @@ import { DocumentData } from "firebase/firestore";
 import SystemPlaylistCard from "./SystemPlaylistCard";
 
 export interface ISystemPlaylistProps {
+    name: string;
     systemPlaylists: DocumentData[];
-    clickMenuSystemPlaylist: (id: number, option: string) => void;
     loading: boolean;
+    clickMenuSystemPlaylist: (id: string, option: string) => void;
 }
 
 export default function SystemPlaylist(props: ISystemPlaylistProps) {
     return (
         <div>
             <h2 className="text-xl p-4">
-                PLAYLISTS
+                {props.name}
                 <span className="badge badge-lg">{props.systemPlaylists.length}</span>
             </h2>
             <div className="grid grid-cols-6 gap-4 m-4">
@@ -27,7 +28,7 @@ export default function SystemPlaylist(props: ISystemPlaylistProps) {
                                 id={systemPlaylist["id"]}
                                 name={systemPlaylist["name"]}
                                 imgFilePath={systemPlaylist["imgFilePath"]}
-                                numberOfSong={systemPlaylist["songs"].length}
+                                songs={systemPlaylist["songs"]}
                                 clickMenuSystemPlaylist={props.clickMenuSystemPlaylist}
                             />
                         );

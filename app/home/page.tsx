@@ -1,62 +1,22 @@
 "use client";
-import SongList from "../components/Song";
 import db from "../db/firestore";
 import { collection, DocumentData, query, where, limit, getDocs } from "@firebase/firestore";
-import React, { MutableRefObject, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import ImageSlider from "../components/ImageSlider";
 import { MusicContext } from "../context-provider/MusicContextProvider";
 import SystemPlaylist from "../components/SystemPlaylist";
+import Constants from "../util/constants";
 
 export default function Home() {
     const [songs, setSongs] = useState<DocumentData[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
-    const textContext = React.useContext(MusicContext);
+    const textContext = useContext(MusicContext);
     const [systemPlaylists, setSystemPlaylists] = useState<DocumentData[]>([]);
+    const [artists, setArtists] = useState<DocumentData[]>([]);
+    const [albums, setAlbums] = useState<DocumentData[]>([]);
+    const [countries, setCountries] = useState<DocumentData[]>([]);
 
-    const getSongs = async () => {
-        // construct a query to get songs
-        const songQuery = query(
-            collection(db.firestore, "Song"),
-            where("name", "!=", ""),
-            limit(5),
-        );
-        // get the songs
-        const querySnapshot = await getDocs(songQuery);
-
-        // map through songs adding them to an array
-        const result: DocumentData[] = [];
-        querySnapshot.forEach((snapshot) => {
-            var temp: DocumentData = snapshot.data();
-            temp["artist"] = getArtistsBySongID(temp["id"]);
-            result.push(temp);
-        });
-        // set it to state
-        setSongs(result);
-    };
-
-    const getArtistsBySongID = async (id: string) => {
-        // construct a query to get artists
-        const artistQuery = query(
-            collection(db.firestore, "Artist"),
-            where("songs", "array-contains", id),
-        );
-        // get the artists
-        const querySnapshot = await getDocs(artistQuery);
-        // map through songs adding them to an array
-        const result: DocumentData[] = [];
-        querySnapshot.forEach((snapshot) => {
-            result.push(snapshot.data());
-        });
-        // set it to state
-        // setArtists(result);
-        let temp: string = "";
-        result.map((artist) => {
-            temp = temp.concat(", ", artist["name"]);
-        });
-        return temp.replace(",", "");
-    };
-
-    const getSystemPlaylist = async () => {
+    const getSystemPlaylists = async () => {
         // construct a query to get songs
         const systemPlaylistQuery = query(collection(db.firestore, "Playlist"));
         // get the songs
@@ -71,34 +31,104 @@ export default function Home() {
         setSystemPlaylists(result);
     };
 
+    const getArtists = async () => {
+        // construct a query to get songs
+        const systemPlaylistQuery = query(collection(db.firestore, "Artist"));
+        // get the songs
+        const querySnapshot = await getDocs(systemPlaylistQuery);
+
+        // map through songs adding them to an array
+        const result: DocumentData[] = [];
+        querySnapshot.forEach((snapshot) => {
+            result.push(snapshot.data());
+        });
+        // set it to state
+        setArtists(result);
+    };
+
+    const getAlbums = async () => {
+        // construct a query to get songs
+        const systemPlaylistQuery = query(collection(db.firestore, "Album"));
+        // get the songs
+        const querySnapshot = await getDocs(systemPlaylistQuery);
+
+        // map through songs adding them to an array
+        const result: DocumentData[] = [];
+        querySnapshot.forEach((snapshot) => {
+            result.push(snapshot.data());
+        });
+        // set it to state
+        setAlbums(result);
+    };
+
+    const getCountries = async () => {
+        // construct a query to get songs
+        const systemPlaylistQuery = query(collection(db.firestore, "Country"));
+        // get the songs
+        const querySnapshot = await getDocs(systemPlaylistQuery);
+
+        // map through songs adding them to an array
+        const result: DocumentData[] = [];
+        querySnapshot.forEach((snapshot) => {
+            result.push(snapshot.data());
+        });
+        // set it to state
+        setCountries(result);
+    };
+
     useEffect(() => {
         // get the songs
-        getSongs();
+        // getSongs();
         // get system playlists
-        getSystemPlaylist();
+        getSystemPlaylists();
+        // get artists
+        // getArtists();
+        // get albums
+        // getAlbums();
+        // get countries
+        // getCountries();
         // reset loading
         setTimeout(() => {
             setLoading(false);
         }, 2000);
-    }, []);
+    }, [songs, systemPlaylists, artists]);
 
     function clickASong(id: string) {
         textContext?.setSong(songs, id);
     }
 
-    function clickMenuSystemPlaylist(id: number, option: string) {
-        console.log("id: " + id + " option: " + option);
+    function clickMenuSystemPlaylist(id: string, option: string) {
+        console.log("id: " + id + ", option: " + option);
     }
 
     return (
         <div>
             <ImageSlider />
             <SystemPlaylist
+                name={Constants.PLAYLISTS}
                 systemPlaylists={systemPlaylists}
                 clickMenuSystemPlaylist={clickMenuSystemPlaylist}
                 loading={loading}
             />
-            <SongList songList={songs} clickASong={clickASong} loading={loading} />
+            <SystemPlaylist
+                name={Constants.ARTISTS}
+                systemPlaylists={artists}
+                clickMenuSystemPlaylist={clickMenuSystemPlaylist}
+                loading={loading}
+            />
+            <SystemPlaylist
+                name={Constants.ALBUMS}
+                systemPlaylists={albums}
+                clickMenuSystemPlaylist={clickMenuSystemPlaylist}
+                loading={loading}
+            />
+            <SystemPlaylist
+                name={Constants.COUNTRIES}
+                systemPlaylists={countries}
+                clickMenuSystemPlaylist={clickMenuSystemPlaylist}
+                loading={loading}
+            />
+            {/* <SongList songList={songs} clickASong={clickASong} loading={loading} /> */}
         </div>
     );
 }

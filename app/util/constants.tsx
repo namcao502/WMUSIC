@@ -1,0 +1,9 @@
+const CONSTANTS = {
+    PLAYLISTS: "PLAYLISTS",
+    ARTISTS: "ARTISTS",
+    ALBUMS: "ALBUMS",
+    COUNTRIES: "COUNTRIES",
+    SONGS: "SONGS",
+};
+
+export default CONSTANTS;

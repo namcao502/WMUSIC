@@ -39,7 +39,7 @@ export default function SideBar(props: ISideBarProps) {
                             </ul>
                         </div>
                         <li>
-                            <Link href={"/home"}>
+                            <Link href={"/home"} passHref>
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     width="24"
@@ -58,7 +58,7 @@ export default function SideBar(props: ISideBarProps) {
                             </Link>
                         </li>
                         <li>
-                            <Link href={"/search"}>
+                            <Link href={"/search"} passHref>
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     width="24"
@@ -77,7 +77,7 @@ export default function SideBar(props: ISideBarProps) {
                             </Link>
                         </li>
                         <li>
-                            <Link href={"/library"}>
+                            <Link href={"/library"} passHref>
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     width="24"
@@ -95,7 +95,7 @@ export default function SideBar(props: ISideBarProps) {
                             </Link>
                         </li>
                         <li>
-                            <Link href={"/diary"}>
+                            <Link href={"/diary"} passHref>
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     width="24"

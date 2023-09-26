@@ -1,25 +1,34 @@
 import Image from "next/image";
+import Link from "next/link";
 
 export interface ISystemPlaylistCardProps {
-    id: number;
+    id: string;
     name: string;
     imgFilePath: string;
-    numberOfSong: number;
-    clickMenuSystemPlaylist: (id: number, option: string) => void;
+    songs: string[];
+    clickMenuSystemPlaylist: (id: string, option: string) => void;
 }
 
 export default function SystemPlaylistCard(props: ISystemPlaylistCardProps) {
-    function clickMenuSystemPlaylist(id: number, option: string) {
+    function clickMenuSystemPlaylist(id: string, option: string) {
         props.clickMenuSystemPlaylist(id, option);
     }
+
     return (
         <div className="card card-compact w-auto glass">
             <figure>
-                <Image src={props.imgFilePath} width={500} height={500} alt="" />
+                <Link
+                    href={{
+                        pathname: "/list",
+                        query: { songs: JSON.stringify(props.songs) },
+                    }}
+                >
+                    <Image src={props.imgFilePath} width={500} height={500} alt="" />
+                </Link>
             </figure>
             <div className="card-body">
                 <h5 className="card-title">
-                    {props.name}
+                    {props.name} + {props.songs.length}
                     <div className="dropdown dropdown-hover">
                         <label tabIndex={0} className="btn btn-ghost">
                             <svg

@@ -1,5 +1,6 @@
 import MusicCard from "./SongCard";
 import { DocumentData } from "@firebase/firestore";
+import Constants from "../util/constants";
 
 export interface IHomeProps {
     songList: DocumentData[];
@@ -11,7 +12,7 @@ export default function Song(props: IHomeProps) {
     return (
         <div>
             <h2 className="text-xl p-4">
-                SONGS
+                {Constants.SONGS}
                 <span className="badge badge-lg">{props.songList.length}</span>
             </h2>
             <div className="grid grid-cols-6 gap-4 m-4">
