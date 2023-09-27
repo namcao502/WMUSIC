@@ -3,11 +3,12 @@
 import Link from "next/link";
 import { MusicContext } from "../context-provider/MusicContextProvider";
 import Player from "./Player";
-import { signOut } from "next-auth/react";
 import { useContext, useEffect, useState } from "react";
-import { auth, firestore } from "../db/firestore";
+import { firestore, initFirebase } from "../db/firestore";
 import { useRouter } from "next/navigation";
 import { DocumentData, collection, getDocs, query, where } from "firebase/firestore";
+import { getAuth } from "firebase/auth";
+import { useAuthState } from "react-firebase-hooks/auth";
 
 export interface ISideBarProps {
     children: React.ReactNode;
@@ -15,53 +16,24 @@ export interface ISideBarProps {
 
 export default function SideBar(props: ISideBarProps) {
     const textContext = useContext(MusicContext);
-    const [accounts, setAccounts] = useState<DocumentData[]>([]);
-    const [loading, setLoading] = useState<boolean>(true);
-    // const session = useSession();
-    const user = auth.currentUser;
     const router = useRouter();
 
+    initFirebase();
+    const auth = getAuth();
+    const [user, loading] = useAuthState(auth);
+
     function handleLogout() {
-        signOut()
-            .then(() => {
-                router.push("/");
-            })
-            .catch((error) => {
-                // An error happened.
-            });
+        auth.signOut();
     }
 
-    // useEffect(() => {
-    //     if (!user) {
-    //         router.push("/");
-    //     }
-    // }, [user, router]);
+    if (loading) {
+        return <span className="loading loading-infinity loading-lg"></span>;
+    }
 
-    const getAccounts = async () => {
-        // construct a query to get songs
-        const systemPlaylistQuery = query(
-            collection(firestore, "Account"),
-            where("userID", "==", user?.uid),
-        );
-        // get the songs
-        const querySnapshot = await getDocs(systemPlaylistQuery);
-
-        // map through songs adding them to an array
-        const result: DocumentData[] = [];
-        querySnapshot.forEach((snapshot) => {
-            result.push(snapshot.data());
-        });
-        // set it to state
-        setAccounts(result);
-        console.log(result);
-    };
-
-    useEffect(() => {
-        getAccounts();
-        setTimeout(() => {
-            setLoading(false);
-        }, 2000);
-    }, [accounts]);
+    if (!user) {
+        router.push("/");
+        return <span className="loading loading-infinity loading-lg"></span>;
+    }
 
     return (
         <div>
@@ -75,15 +47,10 @@ export default function SideBar(props: ISideBarProps) {
                     <label htmlFor="my-drawer-2" className="drawer-overlay"></label>
                     <ul className="menu p-4 min-h-full bg-base-200 text-base-content">
                         {/* Sidebar content here */}
-
                         <div className="dropdown dropdown-hover">
-                            {loading ? (
-                                <div className="loading loading-infinity loading-lg flex"></div>
-                            ) : (
-                                <label tabIndex={0} className="btn m-1">
-                                    Hello, {accounts[0]["name"]}
-                                </label>
-                            )}
+                            <label tabIndex={0} className="btn m-1">
+                                Hello, {user.displayName}
+                            </label>
 
                             <ul
                                 tabIndex={0}
